@@ -1,4 +1,4 @@
-### This server allows you to instruct an LLM to perform note maintanence task.
+## This server allows you to instruct an LLM to perform note maintanence task.
 ### Features included:
 ### - Adding notes
 ### - Deleting all notes at once
