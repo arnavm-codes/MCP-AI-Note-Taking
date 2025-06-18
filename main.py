@@ -3,15 +3,17 @@ from langchain_groq import ChatGroq
 from dotenv import load_dotenv
 import os
 
+from requests.models import ContentDecodingError
+
 mcp = FastMCP("AI Notes") # server name - AI Notes
 
 load_dotenv()
-# print("Load API KEY:", os.getenv("GROQ_API_KEY"))
+#print("Load API KEY:", os.getenv("GROQ_API_KEY"))   # for debugging 
 
-client = ChatGroq(
+client = ChatGroq(          # LLM client
     api_key=os.getenv("GROQ_API_KEY"),
     model="qwen-qwq-32b"
-) # LLM client
+) 
 
 NOTES_FILE = "notes.txt"
 
@@ -33,8 +35,14 @@ def add_note(message: str) -> str:
         str: Confirmation message that the note is added successfully.    
     """
     ensure_file()
+    with open(NOTES_FILE, "r") as file:
+        existing_notes = file.readlines()
+
+    next_serial_number = len(existing_notes) + 1
+    formatted_note = f"[{next_serial_number}] {message}"    
+
     with open(NOTES_FILE, "a") as file:
-        file.write(message+"\n")
+        file.write(formatted_note+"\n")
     return "Note added."    
 
 
@@ -133,7 +141,8 @@ def summarize_notes(keyword:str) -> str:
     """Uses provided keyword to search for notes with that keyword and summarizes it.
     
     Args:
-        keyword(str) : The keyword to match in the notes file.
+        keyword(str): 
+            The keyword to match in the notes file.
 
     Returns:
         str: Summarization of all the notes cotaining the specified keyword, in paragraph form. 
@@ -154,6 +163,33 @@ def summarize_notes(keyword:str) -> str:
             return response.content.strip()
         except Exception as e:
             return f"An error occured during summarisation: {str(e)}"
+
+
+@mcp.tool()
+def detect_topics(keyword: str)-> str:
+    """Uses provided keyword to search for notes containing that keyword and detects its core topic.
+
+    Args:
+        keyword(str): The keyword to match in the notes file. 
+
+    Returns: 
+        str: The core topic of the note. If note not found, returns default message. 
+    """
+    ensure_file()
+    with open(NOTES_FILE, "r") as file:
+        matches = [line for line in file if keyword.lower() in line.lower()]
+
+        if not matches:
+            return "No matches found."
+
+        content = matches    
+        prompt = f"What is the topic of the note with this keyword {keyword} ? \n{content}"
+
+        try:
+            response = client.invoke(prompt)
+            return f"Topic is {response.content.strip()}"
+        except Exception as e:
+            return f"Error occured: {str(e)}"    
 
 
               
