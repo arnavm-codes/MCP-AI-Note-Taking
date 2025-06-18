@@ -3,15 +3,15 @@ from langchain_groq import ChatGroq
 from dotenv import load_dotenv
 import os
 
-from requests.models import ContentDecodingError
-
-mcp = FastMCP("AI Notes") # server name - AI Notes
+# server name - AI Notes
+mcp = FastMCP("AI Notes") 
 
 load_dotenv()
 #print("Load API KEY:", os.getenv("GROQ_API_KEY"))   # for debugging 
 
-client = ChatGroq(          # LLM client
-    api_key=os.getenv("GROQ_API_KEY"),
+# LLM client
+client = ChatGroq(          
+    api_key=os.getenv("GROQ_API_KEY"),  # save groq api key in .env file
     model="qwen-qwq-32b"
 ) 
 
@@ -23,6 +23,13 @@ def ensure_file():
         with open(NOTES_FILE, "w") as file:
             file.write("")
 
+def notes_matching_keywords(keyword:str) -> list[str]:
+    """Finds notes containing the given keyword"""
+    ensure_file()
+    with open (NOTES_FILE, "r") as file:
+        return [line for line in file if keyword.lower() in line.lower()]   
+
+#######################################################################################################
 
 @mcp.tool()
 def add_note(message: str) -> str:
@@ -76,12 +83,25 @@ def delete_all_notes()->str:
 def delete_note(keyword: str) -> str:
     """Deletes notes with specified keyword
     
+    Args:
+        keyword(str): The keyword to match in the notes file.
+
+    Returns:
+        str: Confirmation message that a match to keyword is found. If not matched, 
+             then returns a default message.
     """
     ensure_file()
+    matches = notes_matching_keywords(keyword)
+
+    if not matches:
+        return "No matches found."
+
     with open(NOTES_FILE, "r") as file:
         lines = file.readlines()
 
-    new_lines = [line for line in lines if keyword.lower() not in line.lower()]
+    new_lines = [line for line in lines if line not in matches]
+
+    # counting the number of notes getting deleted
     delete_count = len(lines) - len(new_lines)
     if delete_count == 0:
             return "No matches found"
@@ -104,7 +124,8 @@ def search_note(keyword: str)-> str:
     """
     ensure_file()
     with open(NOTES_FILE, "r") as file:
-        matches = [line for line in file if keyword.lower() in line.lower()]
+        #matches = [line for line in file if keyword.lower() in line.lower()]
+        matches = notes_matching_keywords(keyword)
 
         if matches:
             return "\n".join(matches)
@@ -150,7 +171,7 @@ def summarize_notes(keyword:str) -> str:
     """     
     ensure_file()
     with open(NOTES_FILE, "r") as file:
-        matches = [line for line in file if keyword.lower() in line.lower()]
+        matches = notes_matching_keywords(keyword)
 
         if not matches:
             return "No matches found."
@@ -177,7 +198,7 @@ def detect_topics(keyword: str)-> str:
     """
     ensure_file()
     with open(NOTES_FILE, "r") as file:
-        matches = [line for line in file if keyword.lower() in line.lower()]
+        matches = notes_matching_keywords(keyword)
 
         if not matches:
             return "No matches found."
