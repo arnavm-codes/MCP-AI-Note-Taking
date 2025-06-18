@@ -6,7 +6,7 @@ import os
 mcp = FastMCP("AI Notes") # server name - AI Notes
 
 load_dotenv()
-print("Load API KEY:", os.getenv("GROQ_API_KEY"))
+# print("Load API KEY:", os.getenv("GROQ_API_KEY"))
 
 client = ChatGroq(
     api_key=os.getenv("GROQ_API_KEY"),
