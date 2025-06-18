@@ -1,8 +1,17 @@
-from tkinter import NO
 from mcp.server.fastmcp import FastMCP
+from langchain_groq import ChatGroq
+from dotenv import load_dotenv
 import os
 
 mcp = FastMCP("AI Notes") # server name - AI Notes
+
+load_dotenv()
+print("Load API KEY:", os.getenv("GROQ_API_KEY"))
+
+client = ChatGroq(
+    api_key=os.getenv("GROQ_API_KEY"),
+    model="qwen-qwq-32b"
+) # LLM client
 
 NOTES_FILE = "notes.txt"
 
@@ -88,10 +97,63 @@ def search_note(keyword: str)-> str:
     ensure_file()
     with open(NOTES_FILE, "r") as file:
         matches = [line for line in file if keyword.lower() in line.lower()]
-        #return matches if matches else "No match found."
 
         if matches:
-            return matches
+            return "\n".join(matches)
         else:
             return "No matches found"   
+
+
+@mcp.tool()
+def summarize_all_notes()-> str:
+    """Summarizes all notes using GROQ LLM
+    
+    Returns:
+        str: Summarization of all the notes in paragraph form. If no notes exist, returns a 
+             default message.
+    """
+    ensure_file()
+    with open(NOTES_FILE, "r") as file:
+        content = file.read().strip()
+
+    if not content:
+        return "No notes found."
+
+    prompt = f"Summarize the following notes in paragraph form. \n{content}"
+
+    try:
+        response = client.invoke(prompt)        
+        return response.content.strip()
+    except Exception as e:
+        return f"An error occured during summarisation: {str(e)}"
+
+
+@mcp.tool()
+def summarize_notes(keyword:str) -> str:
+    """Uses provided keyword to search for notes with that keyword and summarizes it.
+    
+    Args:
+        keyword(str) : The keyword to match in the notes file.
+
+    Returns:
+        str: Summarization of all the notes cotaining the specified keyword, in paragraph form. 
+             If no such notes exist, then returns a default message. 
+    """     
+    ensure_file()
+    with open(NOTES_FILE, "r") as file:
+        matches = [line for line in file if keyword.lower() in line.lower()]
+
+        if not matches:
+            return "No matches found."
+
+        content = matches
+        prompt = f"Summarize all the notes which contain the keyword: {keyword} in a paragraph.\n{content}"
+
+        try:
+            response = client.invoke(prompt)
+            return response.content.strip()
+        except Exception as e:
+            return f"An error occured during summarisation: {str(e)}"
+
+
               
