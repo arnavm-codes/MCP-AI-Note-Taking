@@ -17,3 +17,20 @@
 ### - Handles STDIO-based communication
 ### - Different clients can access the server such as, Claude Desktop, Cursor AI, etc.
 ### - Also provides interactive chatbot on terminal using ChatGroq.
+
+
+
+## About MCP
+### MCP is an open protocol that standardizes how applications provide context to LLMs. It's like the USB-C port for AI applications. MCP provides standardiized ways to connect AI models to different tools and sources.
+### MCP allows you to build agents and complex workflows on top of LLMs
+
+## General Architecture
+### MCP hosts are programs like Claude Desktop, AI integrated IDEs etc.
+### MCP clients are protocol clients that maintain one-to-one connections with servers.
+### MCP servers are lightweight programs that each expose specific capabilities and tools via MCP protocol.
+
+### Core concepts
+### MCP servers provide 3 types of capabilities:
+- Tools : Funtions that can be called by the LLM, with user approval.
+- Resources : File-like data that can be read by clients (like APIs).
+- prompts : Pre-written templates that help the user accomplish specific tasks.
