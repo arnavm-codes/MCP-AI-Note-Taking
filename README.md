@@ -12,11 +12,11 @@
 
 
 ## Concepts
-### - Uses ChatGroq for summarization and topic detection
-### - Server is built using FastMCP framework
-### - Handles STDIO-based communication
-### - Different clients can access the server such as, Claude Desktop, Cursor AI, etc.
-### - Also provides interactive chatbot on terminal using ChatGroq.
+- Uses ChatGroq for summarization and topic detection
+- Server is built using FastMCP framework
+- Handles STDIO-based communication
+- Different clients can access the server such as, Claude Desktop, Cursor AI, etc.
+- Also provides interactive chatbot on terminal using ChatGroq.
 
 
 
@@ -25,11 +25,11 @@
 ### MCP allows you to build agents and complex workflows on top of LLMs
 
 ## General Architecture
-### MCP hosts are programs like Claude Desktop, AI integrated IDEs etc.
-### MCP clients are protocol clients that maintain one-to-one connections with servers.
-### MCP servers are lightweight programs that each expose specific capabilities and tools via MCP protocol.
+- MCP hosts are programs like Claude Desktop, AI integrated IDEs etc.
+- MCP clients are protocol clients that maintain one-to-one connections with servers.
+- MCP servers are lightweight programs that each expose specific capabilities and tools via MCP protocol.
 
-### Core concepts
+## Core concepts
 ### MCP servers provide 3 types of capabilities:
 - Tools : Funtions that can be called by the LLM, with user approval.
 - Resources : File-like data that can be read by clients (like APIs).
