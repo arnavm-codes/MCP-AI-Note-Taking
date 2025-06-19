@@ -16,3 +16,4 @@
 ### - Server is built using FastMCP framework
 ### - Handles STDIO-based communication
 ### - Different clients can access the server such as, Claude Desktop, Cursor AI, etc.
+### - Also provides interactive chatbot on terminal using ChatGroq.

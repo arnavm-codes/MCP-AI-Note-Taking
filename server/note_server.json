@@ -1,12 +1,12 @@
 {
   "mcpServers":
   {
-      "weather": 
+      "note_server": 
       {
         "command": "uv",
         "args": 
         [
-          "run",
+          "run",  
           "--with",
           "mcp[cli]",
           "mcp",

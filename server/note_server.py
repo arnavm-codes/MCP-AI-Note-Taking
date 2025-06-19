@@ -9,10 +9,9 @@ mcp = FastMCP("AI Notes")
 load_dotenv()
 #print("Load API KEY:", os.getenv("GROQ_API_KEY"))   # for debugging 
 
-os.environ["GROQ_API_KEY"] = os.getenv("GROQ_API_KEY")
+os.environ["GROQ_API_KEY"] = os.getenv("GROQ_API_KEY")   # save groq api key in .env file
 # LLM client
 client = ChatGroq(          
-    # api_key=os.getenv("GROQ_API_KEY"),  # save groq api key in .env file
     model="qwen-qwq-32b"
 ) 
 
