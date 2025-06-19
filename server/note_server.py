@@ -9,14 +9,16 @@ mcp = FastMCP("AI Notes")
 load_dotenv()
 #print("Load API KEY:", os.getenv("GROQ_API_KEY"))   # for debugging 
 
+os.environ["GROQ_API_KEY"] = os.getenv("GROQ_API_KEY")
 # LLM client
 client = ChatGroq(          
-    api_key=os.getenv("GROQ_API_KEY"),  # save groq api key in .env file
+    # api_key=os.getenv("GROQ_API_KEY"),  # save groq api key in .env file
     model="qwen-qwq-32b"
 ) 
 
 NOTES_FILE = "notes.txt"
 
+# --------------------- Utility Functions --------------------- #
 def ensure_file():
     """Makes sure NOTES_FILE exists"""
     if not os.path.exists(NOTES_FILE):
@@ -29,8 +31,8 @@ def notes_matching_keywords(keyword:str) -> list[str]:
     with open (NOTES_FILE, "r") as file:
         return [line for line in file if keyword.lower() in line.lower()]   
 
-#######################################################################################################
 
+# --------------------- MCP Tools --------------------- #
 @mcp.tool()
 def add_note(message: str) -> str:
     """Append a new note to the notes file.
@@ -124,7 +126,6 @@ def search_note(keyword: str)-> str:
     """
     ensure_file()
     with open(NOTES_FILE, "r") as file:
-        #matches = [line for line in file if keyword.lower() in line.lower()]
         matches = notes_matching_keywords(keyword)
 
         if matches:
@@ -148,7 +149,7 @@ def summarize_all_notes()-> str:
     if not content:
         return "No notes found."
 
-    prompt = f"Summarize the following notes in paragraph form. \n{content}"
+    prompt = f"Summarize all the notes, in paragraph form. \n{content}"
 
     try:
         response = client.invoke(prompt)        
@@ -177,7 +178,7 @@ def summarize_notes(keyword:str) -> str:
             return "No matches found."
 
         content = matches
-        prompt = f"Summarize all the notes which contain the keyword: {keyword} in a paragraph.\n{content}"
+        prompt = f"Summarize all the notes which contain the keyword: {keyword}, in a paragraph.\n{content}"
 
         try:
             response = client.invoke(prompt)
@@ -212,5 +213,5 @@ def detect_topics(keyword: str)-> str:
         except Exception as e:
             return f"Error occured: {str(e)}"    
 
-
-              
+if __name__ == "__main__":
+    mcp.run()

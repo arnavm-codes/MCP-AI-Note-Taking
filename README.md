@@ -7,7 +7,7 @@
 - Searching a note via entering a keyword
 - Reading all notes 
 - Summarizing all notes at once
-- Summarizing specific notes via instructing the LLM search for a keyword within that note.
+- Summarizing specific notes via instructing the LLM to search for a keyword within that note.
 - Core topic detection, by instructing the LLM to detect the topic of a specified note via keyword.
 
 

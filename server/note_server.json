@@ -1,0 +1,18 @@
+{
+  "mcpServers":
+  {
+      "weather": 
+      {
+        "command": "uv",
+        "args": 
+        [
+          "run",
+          "--with",
+          "mcp[cli]",
+          "mcp",
+          "run",
+          "server/note_server.py"
+        ]
+      }
+  }
+}
