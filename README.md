@@ -9,6 +9,7 @@
 - Summarizing all notes at once
 - Summarizing specific notes via instructing the LLM to search for a keyword within that note.
 - Core topic detection, by instructing the LLM to detect the topic of a specified note via keyword.
+- LLM has been restricted to the context of note taking, and won't respond to any other query.
 
 
 ## Concepts
