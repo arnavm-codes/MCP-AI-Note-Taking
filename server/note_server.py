@@ -212,5 +212,7 @@ def detect_topics(keyword: str)-> str:
         except Exception as e:
             return f"Error occured: {str(e)}"    
 
+
+# ----------- Main ----------- #
 if __name__ == "__main__":
     mcp.run()
