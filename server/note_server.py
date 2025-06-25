@@ -17,8 +17,8 @@ else:
     
 
 # server name - AI Notes
-#mcp = FastMCP("AI Notes", host="127.0.0.1", port=8000) 
-mcp = FastMCP("AI Notes") 
+#mcp = FastMCP("AI Notes", host="127.0.0.1", port=8000) ## for using streamable-http transport
+mcp = FastMCP("AI Notes") ## uses stdio transport
 
 #print("Load API KEY:", os.getenv("GROQ_API_KEY"))   # for debugging 
 

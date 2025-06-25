@@ -8,7 +8,7 @@ RUN pip install uv
 COPY requirements.txt /app/
 
 # install dependencies using uv
-RUN uv pip install  --no-cache-dir -r requirements.txt 
+RUN uv pip install  --no-cache-dir -r requirements.txt --system
  
 # copy application code
 COPY server/note_server.py /app/
