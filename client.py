@@ -2,26 +2,48 @@ import asyncio
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 from mcp_use import MCPAgent, MCPClient
+from fastmcp import Client
+from fastmcp.client.transports import StreamableHttpTransport
+import warnings
 import os   
 
+warnings.filterwarnings("ignore",  message=".*`__fields__` attribute is deprecated.*")
+
 def rules(user_input: str) -> str:
-    prompt=f"""You are a specialised expert system focused on Note taking MCP tools integrated with you. Your purpose is to 
-    answer queries and questions only related to the MCP tool. You will not answer any question beyond the scope of this 
-    context. If a question is asked beyond this scope of the MCP tool you should kindly inform them that you can answer
-    questions only regarding the MCP tool.
+    """
+    This function takes a user input and returns a contextual prompt.
+    """
+    prompt =f"""You are a specialised expert system focused only on Note taking MCP tools integrated with you. Your purpose 
+    is to answer queries and questions related only to the MCP tool. You will not answer any question beyond the scope 
+    of this context. If a question is asked beyond the scope of the MCP tool you should kindly inform them that you can 
+    answer questions only regarding the MCP tool.
     User question: {user_input}
     """
     return prompt
-
+    
+    
 
 async def run_memory_chat():
+    """
+    This function runs the memory chat.
+    """
     load_dotenv()
-    os.environ["GROQ_API_KEY"] = os.getenv("GROQ_API_KEY")
-    config_file = "server/note_server.json"
 
-    print("Initializing chat...")
+    transport = StreamableHttpTransport("http://127.0.0.1:8000/mcp/")
+
+    os.environ["GROQ_API_KEY"] = os.getenv("GROQ_API_KEY")
+    config_file = "server/launch_server.json"
+
+    # async with Client(transport=transport) as client:
+    #     await client.ping()
+    #     print("Client opinnged successfully")
+
+
 
     client = MCPClient.from_config_file(config_file)
+    print("Client pinnged successfully!\n")
+    print("Initializing chat...")
+
     llm = ChatGroq(
         model = "qwen-qwq-32b")
 
@@ -55,7 +77,7 @@ async def run_memory_chat():
                 print("Conversation history cleared.")
                 continue
 
-            
+            # checks if user input falls under scope or not
             contextual_prompt = rules(user_input)
             
             # Get response from agent

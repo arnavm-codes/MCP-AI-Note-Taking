@@ -20,7 +20,6 @@
 - Also provides interactive chatbot on terminal using ChatGroq.
 
 
-
 ## About MCP
 - MCP is an open protocol that standardizes how applications provide context to LLMs. It's like the USB-C port for AI applications. 
 - MCP provides standardiized ways to connect AI models to different tools and sources.
