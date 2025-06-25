@@ -3,11 +3,25 @@ from langchain_groq import ChatGroq
 from dotenv import load_dotenv
 import os
 
-# server name - AI Notes
-mcp = FastMCP("AI Notes") 
-
 load_dotenv()
 #print("Load API KEY:", os.getenv("GROQ_API_KEY"))   # for debugging 
+
+# witty key authentication
+REAL_KEY = os.getenv("WITTY_KEY")          
+USER_KEY = os.getenv("USER_WITTY_KEY")     
+ 
+if USER_KEY != REAL_KEY:
+    print("Access denied. Invalid USER_WITTY_KEY.")
+    exit(1)
+else:
+    print("Access granted.")
+    
+
+# server name - AI Notes
+mcp = FastMCP("AI Notes",
+              host="127.0.0.1",
+              port=8000) 
+
 
 os.environ["GROQ_API_KEY"] = os.getenv("GROQ_API_KEY")
 # LLM client
@@ -214,4 +228,4 @@ def detect_topics(keyword: str)-> str:
             return f"Error occured: {str(e)}"    
 
 if __name__ == "__main__":
-    mcp.run()
+    mcp.run(transport='streamable-http')

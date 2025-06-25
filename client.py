@@ -7,7 +7,7 @@ import os
 async def run_memory_chat():
     load_dotenv()
     os.environ["GROQ_API_KEY"] = os.getenv("GROQ_API_KEY")
-    config_file = "server/note_server.json"
+    config_file = "server/launch_server.json"
 
     print("Initializing chat...")
 

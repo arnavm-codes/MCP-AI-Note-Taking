@@ -1,0 +1,21 @@
+{
+  "mcpServers":
+  {
+      "note_server": 
+      {
+        "command": "docker",
+        "args": 
+        [
+          "run",  
+          "-i",
+          "-p", "8001:8001",
+          "-e", "USER_WITTY_KEY",
+          "mcp-notetools"
+        ],
+        "env":
+        {
+          "USER_WITTY_KEY": "witty4945"
+        }
+      }
+  }
+}
